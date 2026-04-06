@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+
 @Service
 @RequiredArgsConstructor
 public class TokenBucketRateLimiterService implements RateLimiterService {
@@ -52,7 +54,7 @@ public class TokenBucketRateLimiterService implements RateLimiterService {
     }
 
     private void save(String tokensKey, int tokens, String tsKey, long ts) {
-        redisTemplate.opsForValue().set(tokensKey, String.valueOf(tokens));
-        redisTemplate.opsForValue().set(tsKey, String.valueOf(ts));
+        redisTemplate.opsForValue().set(tokensKey, String.valueOf(tokens), Duration.ofHours(1));
+        redisTemplate.opsForValue().set(tsKey, String.valueOf(ts), Duration.ofHours(1));
     }
 }
